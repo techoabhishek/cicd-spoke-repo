@@ -29,6 +29,6 @@ jobs:
     needs: detect-and-include
     name: Execute Hub Pipeline
     # Crucially, references the workflow template in the central Hub repository
-    uses: cicd-hub-repo/.github/workflows/nodejs-backend-pilot.yaml@main 
+    uses: techoabhishek/cicd-hub-repo/.github/workflows/nodejs-backend-pilot.yaml@main 
     # Pass secrets securely from the Spoke's environment to the Hub's workflow
     secrets: inherit
