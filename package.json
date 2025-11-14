@@ -1,0 +1,13 @@
+{
+  "name": "sample-node-api",
+  "version": "1.0.0",
+  "description": "Sample API to test the CI/CD Hub-and-Spoke pattern on Cloud Run.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo 'No unit tests yet' && exit 0",
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}

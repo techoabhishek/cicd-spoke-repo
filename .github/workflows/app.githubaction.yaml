@@ -1,0 +1,34 @@
+name: Application Pipeline Entrypoint
+
+on:
+  push:
+    # Trigger on any push to the main branch
+    branches: [ "main" ]
+  workflow_dispatch: # Allows manual triggering from GitHub UI
+
+jobs:
+  # This job detects the techStack and dynamically calls the correct central template
+  detect-and-include:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Detect Tech Stack from Config
+        id: detect
+        run: |
+          # Use grep/awk/sed to safely extract the techStack field from app.config.yaml
+          TECH_STACK=$(grep -E '^\s*techStack:' app.config.yaml | awk -F: '{gsub(//,"",\$2); print \$2}' | tr -d '[:space:]')
+          echo "tech_stack=$TECH_STACK" >> $GITHUB_OUTPUT
+          echo "Detected stack: $TECH_STACK"
+          
+    outputs:
+      tech_stack: ${{ steps.detect.outputs.tech_stack }}
+
+  # Calls the central Hub template using the detected techStack output
+  include-template:
+    needs: detect-and-include
+    name: Execute Hub Pipeline
+    # Crucially, references the workflow template in the central Hub repository
+    uses: cicd-hub-repo/.github/workflows/nodejs-backend-pilot.yaml@main 
+    # Pass secrets securely from the Spoke's environment to the Hub's workflow
+    secrets: inherit
