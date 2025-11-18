@@ -22,3 +22,9 @@ jobs:
 
       - name: Verify Auth
         run: gcloud auth list
+      
+      - name: Validate permission by listing cloud run services
+        run: gcloud run services list --region=us-central1
+
+      - name: Validate AR access
+        run: gcloud artifacts repositories list --location=us-central1
