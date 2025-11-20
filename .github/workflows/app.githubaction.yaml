@@ -7,7 +7,7 @@ on:
 
 jobs:
   call-hub-deploy:
-    uses: techoabhishek/cicd-spoke-repo/.github/workflows/nodejs-cloudrun-deploy.yaml@main
+    uses: techoabhishek/cicd-hub-repo/.github/workflows/nodejs-cloudrun-deploy.yaml@main
 
     with:
       service_dir: .
