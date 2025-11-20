@@ -1,25 +1,5 @@
-app:
-  techStack: nodejs-backend
-  # Application name used for Cloud Run service naming
-  SERVICE_NAME: sample-node-api
-  # Artifact Registry repo name
-  AR_REPO: apps
-
-jobs:
-  # Defines deployment matrix for different environments
-  build-and-deploy:
-    matrix:
-      include:
-        # --- STAGING ENVIRONMENT ---
-        - env_name: staging
-          project: some-gcp-project # Placeholder ID
-          region: us-central1
-          memory: 512Mi
-          cpu: "1"
-          min_instances: "0"
-          # Secret configuration (references secret stored in GCP Secret Manager)
-          secret_name: DB_URL_STAGING
-          env_var: DB_URL
-          # Feature Flags for Post-Deployment Tests
-          ui_tests_enabled: false
-          load_tests_enabled: false
+service_dir: .
+project_id: prj-vonage-apigee-poc
+region: us-central1
+image_repo: cicd-hub-spoke # Artifact Registry repo name
+service_name: sample-node-app-gh-cicd
