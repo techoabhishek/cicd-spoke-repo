@@ -6,7 +6,11 @@ on:
   workflow_dispatch:
 
 jobs:
+  
   call-hub-deploy:
+    permissions:
+      contents: read
+      id-token: write
     uses: techoabhishek/cicd-hub-repo/.github/workflows/nodejs-cloudrun-deploy.yaml@main
 
     with:
