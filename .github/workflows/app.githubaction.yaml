@@ -14,5 +14,5 @@ jobs:
     uses: techoabhishek/cicd-hub-repo/.github/workflows/nodejs-cloudrun-deploy.yaml@main
 
     with:
-      app_config_path: app.config.yaml
+      app_config_path: ../../app.config.yaml
     secrets: inherit
