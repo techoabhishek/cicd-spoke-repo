@@ -6,6 +6,16 @@ on:
   workflow_dispatch:
 
 jobs:
+  notify-approval:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Request Approval via Slack
+        uses: techoabhishek/cicd-hub-repo/.github/actions/slack-notify@main
+        with:
+          status: 'approval' # <--- Triggers the Yellow "Approve" msg
+          slack_webhook: ${{ secrets.SLACK_WEBHOOK }}
+          job_name: "Production Deployment Request"
+          mention_on_failure: "<!here>" # Pings everyone to look at it
   
   call-hub-deploy:
     permissions:
@@ -14,9 +24,23 @@ jobs:
     uses: techoabhishek/cicd-hub-repo/.github/workflows/nodejs-cloudrun-deploy.yaml@main
 
     with:
+      environment: production
       service_dir: .
       project_id: prj-vonage-apigee-poc
       region: us-central1
       image_repo: cicd-hub-spoke # Artifact Registry repo name
       service_name: sample-node-app-gh-cicd
     secrets: inherit
+  
+  post-deploy-notification:
+    runs-on: ubuntu-latest
+    needs: [call-hub-deploy]
+    if: always()
+    steps:
+      - name: Slack Notification
+        uses: techoabhishek/cicd-hub-repo/.github/actions/slack-notify@main
+        with:
+          status: ${{ needs.call-hub-deploy.result }}
+          slack_webhook: ${{ secrets.SLACK_WEBHOOK}}
+          job_name: "Production Deployment"
+          mention_on_failure: "<!channel>" # Only pings channel if it FAIL
