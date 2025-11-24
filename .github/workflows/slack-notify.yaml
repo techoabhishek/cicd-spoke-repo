@@ -23,7 +23,7 @@ jobs:
                 "type": "section",
                 "text": {
                   "type": "mrkdwn",
-                  "text": "*:white_check_mark: Succeeded GitHub Actions*"
+                  "text": "*:white_check_mark: Pipeline Started*"
                 }
               },
               {
