@@ -5,20 +5,8 @@ jobs:
     name: Slack Notification
     runs-on: ubuntu-latest
     steps:
-    - name: Calculate build start time
-      id: build_start_time
-      run: echo "BUILD_START_TIME=$(date +%s)" >> $GITHUB_ENV
-    
     - name: Checkout code
       uses: actions/checkout@v4
-  
-    - name: Calculate build duration
-      id: calculate_duration
-      run: |
-        end_time=$(date +%s)
-        duration=$((end_time - $BUILD_START_TIME))
-        echo "duration=$duration" >> $GITHUB_ENV
-        echo "::set-output name=duration::$duration"
 
     - name: Get short commit hash
       id: short_commit
@@ -68,10 +56,6 @@ jobs:
                   {
                     "type": "mrkdwn",
                     "text": "*Build Logs*\n<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View Logs>"
-                  },
-                  {
-                    "type": "mrkdwn",
-                    "text": "*Took*\n`${{ steps.calculate_duration.outputs.duration }} sec`"
                   },
                   {
                     "type": "mrkdwn",
