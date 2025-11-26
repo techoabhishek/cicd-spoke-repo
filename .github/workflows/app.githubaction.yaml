@@ -9,6 +9,8 @@ jobs:
   notify-approval:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
       - name: Request Approval via Slack
         uses: techoabhishek/cicd-hub-repo/.github/actions/slack-notify@main
         with:
