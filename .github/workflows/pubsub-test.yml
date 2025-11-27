@@ -44,7 +44,7 @@ jobs:
           }
           EOF
 
-          gcloud pubsub topics publish ${{ secrets.PUBSUB_TOPIC }} \
+          gcloud pubsub topics publish github-events-test \
             --message="$(cat payload.json)"
 
       - name: Publish full GitHub event payload
