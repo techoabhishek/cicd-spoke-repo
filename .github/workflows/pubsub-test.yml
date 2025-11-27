@@ -26,6 +26,27 @@ jobs:
       - name: Install Google Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
 
+      - name: Publish minimal Pub/Sub event
+        run: |
+          cat <<EOF > payload.json
+          {
+            "workflow": "${{ github.workflow }}",
+            "status": "${{ job.status }}",
+            "branch": "${{ github.ref_name }}",
+            "commit_sha": "${{ github.sha }}",
+            "commit_message": "${{ github.event.head_commit.message }}",
+            "actor": "${{ github.actor }}",
+            "environment": "staging",
+            "service": "auth-service",
+            "revision": "auth-service-005",
+            "timestamp": "$(date -u +"%Y-%m-%dT%H:%M:%SZ")",
+            "run_url": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          }
+          EOF
+
+          gcloud pubsub topics publish ${{ secrets.PUBSUB_TOPIC }} \
+            --message="$(cat payload.json)"
+
       - name: Publish full GitHub event payload
         run: |
           echo '${{ toJson(github) }}' > event.json
