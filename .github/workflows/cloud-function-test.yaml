@@ -2,6 +2,9 @@ name: Deploy & Test Cloud Function
 
 on:
   workflow_dispatch:   # manual trigger
+permissions:
+  contents: read
+  id-token: write
 
 jobs:
   deploy:
