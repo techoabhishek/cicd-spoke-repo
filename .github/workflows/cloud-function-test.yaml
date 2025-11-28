@@ -1,0 +1,34 @@
+name: Deploy & Test Cloud Function
+
+on:
+  workflow_dispatch:   # manual trigger
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: "projects/864610185638/locations/global/workloadIdentityPools/github-pool/providers/github-provider"
+          service_account: "github-action-cicd@prj-vonage-apigee-poc.iam.gserviceaccount.com"
+
+      - name: Deploy Cloud Function
+        uses: google-github-actions/deploy-cloud-functions@v2
+        with:
+          name: test-cf
+          runtime: python312
+          entry_point: test_value
+          region: us-central1
+          source_dir: cloud-function
+          ingress_settings: ALLOW_ALL
+
+      - name: Test Cloud Function
+        run: |
+          curl -X POST https://test-cf-864610185638.us-central1.run.app \
+            -H "Content-Type: application/json" \
+            -d '{"value": "GitHub Action test"}'

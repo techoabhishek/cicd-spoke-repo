@@ -14,10 +14,10 @@ jobs:
       - name: Request Approval via Slack
         uses: techoabhishek/cicd-hub-repo/.github/actions/slack-notify@main
         with:
-          status: 'approval' # <--- Triggers the Yellow "Approve" msg
+          status: 'approval'
           slack_webhook: ${{ secrets.SLACK_WEBHOOK }}
           job_name: "Production Deployment Request"
-          mention_on_failure: "<!here>" # Pings everyone to look at it
+          mention_on_failure: "<!here>"
   
   call-hub-deploy:
     needs: [notify-approval]
