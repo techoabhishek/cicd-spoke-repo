@@ -34,11 +34,11 @@ jobs:
             echo "notify_status=approval" >> $GITHUB_OUTPUT
           elif [[ ${{ github.ref }} == 'refs/heads/develop' ]]; then
             echo "env_name=staging" >> $GITHUB_OUTPUT
-            echo "notify_status=started" >> $GITHUB_OUTPUT
+            echo "notify_status=skip" >> $GITHUB_OUTPUT
           fi
-  notify-approval:
+  notify-deploy:
     needs: [setup]
-    if: github.event_name == 'push'
+    if: github.event_name == 'push' && needs.setup.outputs.notify_status != 'skip'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
@@ -52,8 +52,11 @@ jobs:
           mention_on_failure: "<@U09V8RH6K6D> <!here>"  # Slack User ID to mention for approval
   
   call-hub-deploy:
-    needs: [setup, notify-approval]
-    if: github.event_name == 'push'
+    needs: [setup, notify-deploy]
+    if: |
+      always() && 
+      needs.setup.result == 'success' && 
+      (needs.notify-deploy.result == 'success' || needs.notify-deploy.result == 'skipped')
     permissions:
       contents: read
       id-token: write
