@@ -1,12 +1,44 @@
 name: Spoke CI - Build & Deploy sample-node-app to Cloud Run
 on:
+  pull_request:
+    branches: 
+      - main
+      - develop
   push:
     branches:
       - main
+      - develop
   workflow_dispatch:
 
 jobs:
+  pr-check:
+    # Only run if this is a PR event
+    if: github.event_name == 'pull_request'
+    uses: techoabhishek/cicd-hub-repo/.github/workflows/nodejs-ci.yaml@main
+    with:
+      service_dir: .
+    secrets: inherit
+
+  setup:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    outputs:
+      env_name: ${{ steps.env.outputs.env_name }}
+      notify_status: ${{ steps.env.outputs.notify_status }}
+    steps:
+      - id: env
+        run: |
+          # Map Branch -> Environment
+          if [[ ${{ github.ref }} == 'refs/heads/main' ]]; then
+            echo "env_name=production" >> $GITHUB_OUTPUT
+            echo "notify_status=approval" >> $GITHUB_OUTPUT
+          elif [[ ${{ github.ref }} == 'refs/heads/develop' ]]; then
+            echo "env_name=staging" >> $GITHUB_OUTPUT
+            echo "notify_status=started" >> $GITHUB_OUTPUT
+          fi
   notify-approval:
+    needs: [setup]
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
@@ -14,20 +46,21 @@ jobs:
       - name: Request Approval via Slack
         uses: techoabhishek/cicd-hub-repo/.github/actions/slack-notify@main
         with:
-          status: 'approval'
+          status: ${{ needs.setup.outputs.notify_status }}
           slack_webhook: ${{ secrets.SLACK_WEBHOOK }}
-          job_name: "Production Deployment Request"
+          job_name: "Deploying to ${{ needs.setup.outputs.env_name }}"
           mention_on_failure: "<@U09V8RH6K6D> <!here>"  # Slack User ID to mention for approval
   
   call-hub-deploy:
-    needs: [notify-approval]
+    needs: [setup, notify-approval]
+    if: github.event_name == 'push'
     permissions:
       contents: read
       id-token: write
     uses: techoabhishek/cicd-hub-repo/.github/workflows/nodejs-cloudrun-deploy.yaml@main
 
     with:
-      environment: production
+      environment: ${{ needs.setup.outputs.env_name }}
       service_dir: .
       project_id: prj-vonage-apigee-poc
       region: us-central1
