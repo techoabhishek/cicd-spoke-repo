@@ -53,7 +53,10 @@ jobs:
   
   call-hub-deploy:
     needs: [setup, notify-deploy]
-    if: github.event_name == 'push'
+    if: |
+      always() && 
+      needs.setup.result == 'success' && 
+      (needs.notify-deploy.result == 'success' || needs.notify-deploy.result == 'skipped')
     permissions:
       contents: read
       id-token: write
