@@ -17,7 +17,7 @@ jobs:
           status: 'approval'
           slack_webhook: ${{ secrets.SLACK_WEBHOOK }}
           job_name: "Production Deployment Request"
-          mention_on_failure: "<!here>"
+          mention_on_failure: "<U09V8RH6K6D>"  # Slack User ID to mention for approval
   
   call-hub-deploy:
     needs: [notify-approval]
