@@ -9,7 +9,7 @@ app.get('/', (req, res) => {
   console.log(`Request received for service: ${serviceName}`);
   res.status(200).send(`
     <h1>Hello from the Jumper-AI CI/CD Spoke!</h1>
-    <p>Service: <strong>${serviceName}</strong> (Deployed via GitHub Actions Hub)</p>
+    <p>Service: <strong>${serviceName}</strong> (🚀 Deployed via GitHub Actions Hub)</p>
   `);
 });
 
