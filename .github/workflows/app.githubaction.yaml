@@ -11,10 +11,13 @@ on:
   workflow_dispatch:
 
 jobs:
+
   pr-check:
+
     # Only run if this is a PR event
     if: github.event_name == 'pull_request'
     uses: techoabhishek/cicd-hub-repo/.github/workflows/nodejs-ci.yaml@main
+    
     with:
       service_dir: .
     secrets: inherit
