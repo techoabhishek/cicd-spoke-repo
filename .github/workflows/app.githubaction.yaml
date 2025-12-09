@@ -10,13 +10,15 @@ on:
       - develop
   workflow_dispatch:
 
+env:
+  SERVICE_DIR: .
 jobs:
   pr-check:
     # Only run if this is a PR event
     if: github.event_name == 'pull_request'
     uses: techoabhishek/cicd-hub-repo/.github/workflows/nodejs-ci.yaml@main
     with:
-      service_dir: .
+      service_dir: ${{ env.SERVICE_DIR }} 
     secrets: inherit
 
   setup:
@@ -64,7 +66,7 @@ jobs:
 
     with:
       environment: ${{ needs.setup.outputs.env_name }}
-      service_dir: .
+      service_dir: ${{ env.SERVICE_DIR }}
       project_id: prj-vonage-apigee-poc
       region: us-central1
       image_repo: cicd-hub-spoke # Artifact Registry repo name
