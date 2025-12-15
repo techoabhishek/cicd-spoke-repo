@@ -20,3 +20,5 @@ COPY --from=builder /app/index.js ./
 EXPOSE 8080
 
 CMD ["index.js"] 
+
+### ADDING COMMENTS
