@@ -1,36 +1,41 @@
 changelog:
-  exclude:
-    - labels: [chore, dependencies, automated-pr, ignore]
-    - authors: [dependabot[bot]]
   categories:
-    - title: "🚀 New Features"
+    - title: 🚀 Features
       labels:
-        - feature
-        - feat
-        - enhancement
+        - type:feature
 
-    - title: "🐛 Bug Fixes"
+    - title: 🐛 Bug Fixes
       labels:
-        - fix
-        - bug
+        - type:bugfix
 
-    - title: "⚠️ Breaking Changes"
+    - title: 🔥 Breaking Changes
       labels:
-        - breaking-change
-        - breaking
+        - type:breaking
 
-    - title: "📚 Documentation"
+    - title: 🔐 Security
       labels:
-        - docs
-        - doc
+        - type:security
 
-    - title: "🔒 Security"
+    - title: 🛠 Infrastructure / CI
       labels:
-        - security
+        - type:infra
 
-    - title: "🧰 Maintenance"
+    - title: 📚 Documentation
       labels:
-        - chore
-        - refactor
-        - test
-        - ci
+        - type:docs
+
+  exclude:
+    labels:
+      - skip-release-notes
+
+  template: |
+    ## 🔖 Release {{tag_name}}
+
+    ### 📅 Release Date
+    {{date}}
+
+    ### 🧩 Summary
+    {{changes}}
+
+    ---
+    **Full Changelog**: https://github.com/{{owner}}/{{repo}}/compare/{{previous_tag}}...{{tag_name}}
