@@ -80,4 +80,4 @@ jobs:
     permissions:
       contents: write
       pull-requests: read
-    uses: techoabhishek/cicd-hub-repo/.github/workflows/generate-release.yaml@main
+    uses: techoabhishek/cicd-hub-repo/.github/workflows/generate-releases.yaml@main
