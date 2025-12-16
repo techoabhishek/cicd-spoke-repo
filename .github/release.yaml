@@ -1,0 +1,36 @@
+changelog:
+  exclude:
+    - labels: [chore, dependencies, automated-pr, ignore]
+    - authors: [dependabot[bot]]
+  categories:
+    - title: "🚀 New Features"
+      labels:
+        - feature
+        - feat
+        - enhancement
+
+    - title: "🐛 Bug Fixes"
+      labels:
+        - fix
+        - bug
+
+    - title: "⚠️ Breaking Changes"
+      labels:
+        - breaking-change
+        - breaking
+
+    - title: "📚 Documentation"
+      labels:
+        - docs
+        - doc
+
+    - title: "🔒 Security"
+      labels:
+        - security
+
+    - title: "🧰 Maintenance"
+      labels:
+        - chore
+        - refactor
+        - test
+        - ci
