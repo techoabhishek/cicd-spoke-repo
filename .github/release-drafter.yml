@@ -1,0 +1,45 @@
+# .github/release-drafter.yml
+
+# This part strictly handles the Auto-Labeling based on Titles/Branches
+autolabeler:
+  - label: 'feat'
+    title:
+      - '/^feat/i'
+      - '/^feature/i'
+    branch:
+      - '/^feature\/.*/i'
+
+  - label: 'fix'
+    title:
+      - '/^fix/i'
+      - '/^bug/i'
+    branch:
+      - '/^bugfix\/.*/i'
+      - '/^hotfix\/.*/i'
+
+  - label: 'chore'
+    title:
+      - '/^chore/i'
+    branch:
+      - '/^chore\/.*/i'
+
+  - label: 'docs'
+    title:
+      - '/^docs/i'
+      - '/^doc/i'
+    branch:
+      - '/^doc\/.*/i'
+
+  - label: 'perf'
+    title:
+      - '/^perf/i'
+    branch:
+      - '/^perf\/.*/i'
+
+  - label: 'security'
+    title:
+      - '/^security/i'
+
+  - label: 'breaking-change'
+    body:
+      - '/BREAKING CHANGE/i'

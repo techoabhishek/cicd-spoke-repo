@@ -4,13 +4,16 @@ on:
     types: [opened, synchronize, reopened, edited]
 
 jobs:
-  label:
+  triage:
     runs-on: ubuntu-latest
     permissions:
       contents: read
       pull-requests: write
     steps:
-      - uses: actions/labeler@v5
+      # 🟢 USE RELEASE DRAFTER (The correct tool for Title/Branch labeling)
+      - uses: release-drafter/release-drafter@v5
         with:
-          repo-token: "${{ secrets.GITHUB_TOKEN }}"
-          sync-labels: true
+          config-name: release-drafter.yml
+          disable-releaser: true # ⚠️ Important: We only want it to label PRs, not create releases yet
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
