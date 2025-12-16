@@ -1,26 +1,36 @@
-# Description, Motivation, and Context #
-# What is the destination branch of this PR? #
+## 📌 **Purpose of this Pull Request**
+<!-- A brief description of the problem or feature this PR addresses. -->
 
-# How Has This Been Tested? #
-# Screenshots (if appropriate): #
+## ✨ **Changes**
+<!-- Describe the changes made in the codebase. What was added, removed, or modified? -->
 
-# Types of changes #
-[ ] Bug fix (non-breaking change which fixes an issue)
-[ ] New feature (non-breaking change which adds functionality)
-[ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
-# Checklist: #
-[ ] I merged current develop to this branch.
-[ ] My change requires a change to the documentation (confluence test paths, code style etc.)
-[ ] I have updated the documentation accordingly.
-[ ] My change requires a change to the UI tests.
-[ ] I have updated UI test accordingly.
-[ ] I unit tested new methods.
-[ ] I checked linter on local.
-[ ] I checked unit tests on local.
-# Is additional manual testing needed? #
-# Files with major changes / what is worth paying more attention to? #
-# Which variances have been affected #                       
-[ ] variant 1                       
-[ ] variant 2                       
-[ ] variant 3                       
-[ ] variant 3
+- [ ] Added/Modified <feature or file name>
+- [ ] Refactored <specific function/component/file>
+- [ ] Fixed <bug/issue>
+
+## 🛠 **How to Test**
+<!-- Provide step-by-step instructions on how to test your changes. If applicable, include any prerequisites. -->
+1. Pull this branch: `git checkout <branch-name>`
+2. Run any necessary commands (e.g., `npm install` or `python manage.py migrate`)
+3. Run tests or load the application to verify the changes.
+4. Describe any test cases written for this PR.
+
+## 🐛 **Related Issues**
+<!-- Link any issues or tasks that this PR is related to, for example: -->
+- Fixes #<issue-number>
+- Resolves #<issue-number>
+- Closes #<issue-number>
+
+## 📝 **Additional Context**
+<!-- Include any additional context or information that would be helpful for the reviewer. -->
+- Any limitations or edge cases to keep in mind.
+- Notes about backward compatibility or version updates.
+
+## ✅ **Checklist**
+- [ ] I have read the **CONTRIBUTING** guidelines.
+- [ ] My code follows the code style of this project.
+- [ ] I have performed a self-review of my code.
+- [ ] I have commented my code, particularly in hard-to-understand areas.
+- [ ] I have tested my changes thoroughly.
+- [ ] I have added relevant tests (if applicable).
+- [ ] I have updated the documentation (if applicable).
