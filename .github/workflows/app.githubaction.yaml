@@ -80,6 +80,4 @@ jobs:
     permissions:
       contents: write
       pull-requests: read
-    with:
-      release_branch: chore/test-pr-commits
     uses: techoabhishek/cicd-hub-repo/.github/workflows/generate-releases.yaml@main
