@@ -75,16 +75,9 @@ jobs:
     secrets: inherit
   
   create-release:
-    # Run only for Production deployments that succeeded
     needs: [setup, call-hub-deploy]
     if: needs.setup.outputs.env_name == 'production' && success()
-    
-    # Permission to write the release
     permissions:
       contents: write
       pull-requests: read
-    
-    uses: techoabhishek/cicd-hub-repo/.github/workflows/create-release.yaml@main
-    with:
-      environment: ${{ needs.setup.outputs.env_name }}
-    secrets: inherit
+    uses: techoabhishek/cicd-hub-repo/.github/workflows/generate-releases.yaml@main
