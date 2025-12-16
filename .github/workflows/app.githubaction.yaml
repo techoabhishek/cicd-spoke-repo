@@ -82,6 +82,7 @@ jobs:
     # Permission to write the release
     permissions:
       contents: write
+      pull-requests: read
     
     uses: techoabhishek/cicd-hub-repo/.github/workflows/create-release.yaml@main
     with:

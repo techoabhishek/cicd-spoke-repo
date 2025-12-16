@@ -1,0 +1,27 @@
+# 1. Feature
+feat:
+ - head-branch: ['^feature/.*']
+ - pr-title: ['^feat.*']
+
+# 2. Bug Fixes
+fix:
+ - head-branch: ['^bugfix/.*', '^hotfix/.*']
+ - pr-title: ['^fix.*']
+
+# 3. Documentation
+docs:
+ - head-branch: ['^doc/.*']
+ - pr-title: ['^docs.*']
+
+# 4. Maintenance/Chore
+chore:
+ - head-branch: ['^chore/.*']
+ - pr-title: ['^chore.*']
+
+# 5. Performance
+perf:
+ - pr-title: ['^perf.*']
+
+# 6. Breaking Changes (Manual label usually, or strict keyword)
+breaking-change:
+ - pr-body: ['^BREAKING CHANGE:.*']
