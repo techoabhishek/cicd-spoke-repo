@@ -39,6 +39,7 @@ jobs:
             echo "env_name=staging" >> $GITHUB_OUTPUT
             echo "notify_status=skip" >> $GITHUB_OUTPUT
           fi
+          echo "Setup complete for environment: ${{ steps.env.outputs.env_name }}"
   notify-deploy:
     needs: [setup]
     if: github.event_name == 'push' && needs.setup.outputs.notify_status != 'skip'
@@ -85,3 +86,4 @@ jobs:
     with:
       environment: ${{ needs.setup.outputs.env_name }}
     uses: techoabhishek/cicd-hub-repo/.github/workflows/generate-releases.yaml@main
+    secrets: inherit
