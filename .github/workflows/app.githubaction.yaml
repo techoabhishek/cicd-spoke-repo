@@ -73,3 +73,11 @@ jobs:
       image_repo: cicd-hub-spoke # Artifact Registry repo name
       service_name: sample-node-app-gh-cicd
     secrets: inherit
+  
+  create-release:
+    needs: [setup, call-hub-deploy]
+    if: needs.setup.outputs.env_name == 'production' && success()
+    permissions:
+      contents: write
+      pull-requests: read
+    uses: techoabhishek/cicd-hub-repo/.github/workflows/generate-releases.yaml@main
