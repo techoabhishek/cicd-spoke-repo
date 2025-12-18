@@ -82,4 +82,6 @@ jobs:
     permissions:
       contents: write
       pull-requests: read
+    with:
+      environment: ${{ needs.setup.outputs.env_name }}
     uses: techoabhishek/cicd-hub-repo/.github/workflows/generate-releases.yaml@main
