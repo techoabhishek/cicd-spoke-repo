@@ -76,8 +76,12 @@ jobs:
   
   create-release:
     needs: [setup, call-hub-deploy]
-    if: needs.setup.outputs.env_name == 'production' && success()
+    if: |
+        success() &&
+        (needs.setup.outputs.env_name == 'production' || needs.setup.outputs.env_name == 'staging')
     permissions:
       contents: write
       pull-requests: read
+    with:
+      environment: ${{ needs.setup.outputs.env_name }}
     uses: techoabhishek/cicd-hub-repo/.github/workflows/generate-releases.yaml@main
