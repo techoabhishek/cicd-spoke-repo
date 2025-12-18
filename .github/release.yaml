@@ -3,30 +3,54 @@ changelog:
     - title: 🚀 Features
       labels:
         - type:feature
+        - enhancement
 
     - title: 🐛 Bug Fixes
       labels:
         - type:bugfix
+        - bug
 
     - title: 🔥 Breaking Changes
       labels:
         - type:breaking
+        - breaking
+        - break
+
 
     - title: 🔐 Security
       labels:
         - type:security
+        - security
+
+    - title: ⚡ Performance
+      labels:
+        - type:performance
+        - performance
+        - perf
 
     - title: 🛠 Infrastructure / CI
       labels:
         - type:infra
+        - chore
+        - dependency
 
     - title: 📚 Documentation
       labels:
         - type:docs
+        - documentation
+        - docs
+
+    # 👇 Fallback — VERY IMPORTANT
+    - title: 📦 Other Changes
+      labels:
+        - "*"
 
   exclude:
     labels:
       - skip-release-notes
+      - duplicate
+      - wontfix
+      - invalid
 
   template: |
     ## 🔖 Release {{tag_name}}
