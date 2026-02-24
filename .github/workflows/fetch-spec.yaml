@@ -17,12 +17,12 @@ jobs:
           curl -H "Authorization: Bearer ${{ secrets.CROSS_REPO_PAT }}" \
               -H "Accept: application/vnd.github.v3.raw" \
               -L https://api.github.com/repos/techoabhishek/cicd-hub-repo/contents/specs/data.json \
-              -o ./src/config/data.json
+              -o ./data.json
               
       - name: Verify Download
         run: |
           echo "Downloaded Spec:"
-          cat ./src/config/data.json
+          cat ./data.json
 
       # --- ADD YOUR NEXT STEPS HERE ---
       # e.g., Run tests to ensure the new spec doesn't break the Spoke
