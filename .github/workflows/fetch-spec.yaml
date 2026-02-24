@@ -1,0 +1,31 @@
+name: Sync Spec and Build
+
+on:
+  repository_dispatch:
+    types: [spec_updated] # Listens for the exact event-type defined in the Hub
+
+jobs:
+  fetch-and-validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Spoke Code
+        uses: actions/checkout@v4
+
+      - name: Fetch Latest Spec JSON from Hub
+        run: |
+          # Fetch the raw file using the GitHub API
+          curl -H "Authorization: Bearer ${{ secrets.CROSS_REPO_PAT }}" \
+              -H "Accept: application/vnd.github.v3.raw" \
+              -L https://api.github.com/repos/techoabhishek/cicd-hub-repo/contents/specs/data.json \
+              -o ./src/config/data.json
+              
+      - name: Verify Download
+        run: |
+          echo "Downloaded Spec:"
+          cat ./src/config/data.json
+
+      # --- ADD YOUR NEXT STEPS HERE ---
+      # e.g., Run tests to ensure the new spec doesn't break the Spoke
+      # e.g., Commit the updated JSON back to the Spoke repo via a PR
+      # - name: Run Tests
+      #   run: npm run test
