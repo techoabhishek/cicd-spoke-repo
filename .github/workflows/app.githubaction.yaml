@@ -9,7 +9,8 @@ on:
       - main
       - develop
   workflow_dispatch:
-
+env:
+  SLACK_REPO_OWNER: "@U0APMALNPPY"
 jobs:
 
   pr-check:
@@ -53,7 +54,7 @@ jobs:
           status: ${{ needs.setup.outputs.notify_status }}
           slack_webhook: ${{ secrets.SLACK_WEBHOOK }}
           job_name: "Deploying to ${{ needs.setup.outputs.env_name }}"
-          mention_on_failure: "<@U09V8RH6K6D> <!here>"  # Slack User ID to mention for approval
+          mention_on_failure: ${{ env.SLACK_REPO_OWNER }}  # Slack User ID to mention for approval
   
   call-hub-deploy:
     needs: [setup, notify-deploy]
