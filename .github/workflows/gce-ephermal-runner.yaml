@@ -1,0 +1,125 @@
+name: GCE Ephemeral Runner E2E Test
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+env:
+  PROJECT_ID: prj-vonage-apigee-poc
+  ZONE: us-central1-a
+
+jobs:
+
+# JOB 1 → Create runner VM
+  create-runner:
+    runs-on: ubuntu-latest
+    outputs:
+      label: ${{ steps.create.outputs.label }}
+      instance: ${{ steps.create.outputs.instance }}
+    steps:
+      - name: Authenticate to GCP (WIF)
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.GCP_WIF_PROVIDER }}
+          service_account: ${{ secrets.GCP_SA_EMAIL }}
+
+      - name: Setup gcloud
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Create ephemeral runner
+        id: create
+        uses: related-sciences/gce-github-runner@v0.14
+        with:
+          token: ${{ secrets.GH_PAT }}
+          project_id: ${{ env.PROJECT_ID }}
+          machine_type: e2-standard-2
+          machine_zone: ${{ env.ZONE }}
+          network: vpc-01
+          subnet: subnet-a
+          image_project: ubuntu-os-cloud
+          image_family: ubuntu-2204-lts
+          disk_size: 50
+          labels: gce-ephemeral
+          runner_service_account: ${{ secrets.GCP_SA_EMAIL }}
+          ephemeral: true
+          no_external_address: false
+          startup_script: |
+            sudo apt-get update
+            sudo apt-get install -y \
+              docker.io \
+              git \
+              curl \
+              wget
+            sudo systemctl start docker
+            sudo usermod -aG docker $USER
+
+# JOB 2 → Execute workload on created runner
+  runner-test:
+    needs: create-runner
+    runs-on: ${{ needs.create-runner.outputs.label }}
+    timeout-minutes: 30
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v6
+
+      - name: System info
+        run: |
+          echo "Hostname:"
+          hostname
+          echo "CPU:"
+          nproc
+          echo "Memory:"
+          free -h
+      - name: Docker validation
+        run: |
+          docker --version || echo "Docker missing"
+          sudo docker run hello-world
+      - name: gcloud validation
+        run: |
+          gcloud --version || true
+          gcloud auth list || true
+      - name: Network test
+        run: |
+          echo "Testing internet"
+          curl -I https://google.com
+      - name: Build container test
+        run: |
+          cat <<EOF > Dockerfile
+          FROM ubuntu:22.04
+          RUN apt-get update
+          CMD ["echo","container works"]
+          EOF
+          sudo docker build -t test-image .
+          sudo docker run test-image
+      - name: Simulate workload
+        run: |
+          echo "Simulating CI workload"
+          sleep 60
+          echo "Runner test completed"
+
+# JOB 3 → Cleanup validation
+
+  cleanup-check:
+    needs:
+      - create-runner
+      - runner-test
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Authenticate to GCP
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.GCP_WIF_PROVIDER }}
+          service_account: ${{ secrets.GCP_SA_EMAIL }}
+      - name: Setup gcloud
+        uses: google-github-actions/setup-gcloud@v2
+      - name: Verify runner deleted
+        run: |
+          echo "Checking instance cleanup"
+          gcloud compute instances list \
+          --filter="name:${{ needs.create-runner.outputs.instance }}" \
+          --zones=${{ env.ZONE }} || true
+          echo "Cleanup validation done"
