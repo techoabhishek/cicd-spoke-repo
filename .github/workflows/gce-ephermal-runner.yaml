@@ -46,15 +46,6 @@ jobs:
           runner_service_account: ${{ secrets.GCP_SA_EMAIL }}
           ephemeral: true
           no_external_address: false
-          startup_script: |
-            sudo apt-get update
-            sudo apt-get install -y \
-              docker.io \
-              git \
-              curl \
-              wget
-            sudo systemctl start docker
-            sudo usermod -aG docker $USER
 
 # JOB 2 → Execute workload on created runner
   runner-test:
@@ -73,6 +64,12 @@ jobs:
           nproc
           echo "Memory:"
           free -h
+      - name: Install Docker (official)
+        run: |
+          curl -fsSL https://get.docker.com | sudo sh
+          sudo usermod -aG docker $USER
+          sudo chmod 666 /var/run/docker.sock
+          docker version
       - name: Docker validation
         run: |
           docker --version || echo "Docker missing"
