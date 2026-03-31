@@ -41,20 +41,25 @@ jobs:
           subnet: subnet-a
           image_project: ubuntu-os-cloud
           image_family: ubuntu-2204-lts
-          disk_size: 50
-          labels: gce-ephemeral
+          disk_size: 100
+          labels: gce-ephemeral-runner
           runner_service_account: ${{ secrets.GCP_SA_EMAIL }}
           ephemeral: true
           no_external_address: false
-          startup_script: |
-            sudo apt-get update
-            sudo apt-get install -y \
-              docker.io \
-              git \
-              curl \
-              wget
-            sudo systemctl start docker
-            sudo usermod -aG docker $USER
+          actions_preinstalled: true
+          preemptible: true
+      - name: Check tools
+        run: |
+          which docker || echo "Docker missing"
+          which git
+          which node
+          which python3
+      - name: Install Docker (official)
+        run: |
+          curl -fsSL https://get.docker.com | sudo sh
+          sudo usermod -aG docker $USER
+          sudo chmod 666 /var/run/docker.sock
+          docker version
 
 # JOB 2 → Execute workload on created runner
   runner-test:
