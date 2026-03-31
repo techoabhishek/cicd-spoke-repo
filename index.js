@@ -14,5 +14,5 @@ app.get('/', (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Sample-Node-API listening on port ${port}`);
+  console.log(`Sample-API listening on port ${port}`);
 });

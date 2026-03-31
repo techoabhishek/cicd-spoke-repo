@@ -9,7 +9,8 @@ on:
       - main
       - develop
   workflow_dispatch:
-
+env:
+  SLACK_REPO_OWNER: "@U0APMALNPPY"
 jobs:
 
   pr-check:
@@ -53,7 +54,7 @@ jobs:
           status: ${{ needs.setup.outputs.notify_status }}
           slack_webhook: ${{ secrets.SLACK_WEBHOOK }}
           job_name: "Deploying to ${{ needs.setup.outputs.env_name }}"
-          mention_on_failure: "<@U09V8RH6K6D> <!here>"  # Slack User ID to mention for approval
+          mention_on_failure: ${{ env.SLACK_REPO_OWNER }}  # Slack User ID to mention for approval
   
   call-hub-deploy:
     needs: [setup, notify-deploy]
@@ -87,3 +88,32 @@ jobs:
       environment: ${{ needs.setup.outputs.env_name }}
     uses: techoabhishek/cicd-hub-repo/.github/workflows/generate-releases.yaml@main
     secrets: inherit
+  
+  # 👇 NEW: SEND THE FINAL RELEASE NOTES
+  notify-release-notes:
+    needs: [setup, create-release]
+    # Only run if release creation was successful
+    if: success() && (needs.setup.outputs.env_name == 'production' || needs.setup.outputs.env_name == 'staging')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        
+      - name: Send Release Notes
+        uses: techoabhishek/cicd-hub-repo/.github/actions/slack-notify@main
+        with:
+          status: 'success'
+          slack_webhook: ${{ secrets.SLACK_WEBHOOK }}
+          mode: 'release'
+          title: ' Release'
+          job_name: "${{ needs.setup.outputs.env_name }} v1.0.0" # You can pass dynamic tag here later
+          
+          # 👇 These are the Spoke-specific details
+          instance_name: 'EU & US' 
+          function_name: 'Backend'
+          cm_ticket: 'VCJAT-2' # The test Jira ticket you provided
+          services: 'Broadcast Core Service'
+          
+          # 👇 This is where the PR commit bodies will go. For testing, we mock the ticket.
+          custom_text: |
+                • <https://techolution.atlassian.net/browse/VCJAT-2|VCJAT-2>: Slack Release Note Test
