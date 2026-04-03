@@ -68,6 +68,17 @@ on:
           - A48
           - A49
           - A50
+          - A51
+          - A52
+          - A53
+          - A54
+          - A55
+          - A56
+          - A57
+          - A58
+          - A59
+          - A60
+
 
       
 
@@ -78,3 +89,4 @@ jobs:
       - name: Show Selected Values
         run: |
           echo "Selected Environment: ${{ github.event.inputs.environment }}"
+          echo "Selected Golden Number: ${{ github.event.inputs.golden_number }}"
